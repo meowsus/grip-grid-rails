@@ -15,9 +15,9 @@
 // 6. responsive breakpoints. Modify as needed.
 //
 $grip-namespace:  'grid' !default;  // [1]
-$grip-gutter:     20px !default;    // [2]
+$grip-gutter:     16px !default;    // [2]
 
-$grip-width-class-style:  'fraction' !default;  // [3]
+$grip-width-class-style:  'percentage' !default;  // [3]
 $grip-widths:             (2, 3, 4) !default;   // [4]
 
 $grip-enable-responsive:  true !default;  // [5]
@@ -31,23 +31,26 @@ $grip-breakpoints: (
 //
 // Toggleable grid layout modifiers.
 //
-$grip-enable-grid-center:       false !default;
-$grip-enable-grid-right:        false !default;
-$grip-enable-grid-middle:       false !default;
-$grip-enable-grid-bottom:       false !default;
-$grip-enable-grid-flush:        false !default;
-$grip-enable-grid-tiny:         false !default;
-$grip-enable-grid-small:        false !default;
-$grip-enable-grid-large:        false !default;
-$grip-enable-grid-huge:         false !default;
-$grip-enable-grid-auto:         false !default;
-$grip-enable-grid-rev:          false !default;
+$grip-enable-grid-center:   false !default;
+$grip-enable-grid-right:    false !default;
+$grip-enable-grid-middle:   false !default;
+$grip-enable-grid-bottom:   false !default;
+$grip-enable-grid-flush:    false !default;
+$grip-enable-grid-tiny:     false !default;
+$grip-enable-grid-small:    false !default;
+$grip-enable-grid-large:    false !default;
+$grip-enable-grid-huge:     false !default;
+$grip-enable-grid-auto:     false !default;
+$grip-enable-grid-reverse:  false !default;
 
 
 //
 // Toggleable grid cell layout modifiers.
 //
 $grip-enable-grid-cell-center:  false !default;
+
+$grip-enable-grid-cell-content-center:  false !default;
+$grip-enable-grid-cell-content-right:   false !default;
 
 
 
@@ -233,27 +236,27 @@ $grip-enable-grid-cell-center:  false !default;
 
 @if ($grip-enable-grid-tiny) {
     .#{$grip-namespace}--tiny {
-        margin-left: -($grip-gutter / 4);
+        margin-left: round($grip-gutter / 4) * -1;
 
         > .#{$grip-namespace}__cell {
-            padding-left: ($grip-gutter / 4);
+            padding-left: round($grip-gutter / 4);
         }
     }
 }
 
 @if ($grip-enable-grid-small) {
     .#{$grip-namespace}--small {
-        margin-left: -($grip-gutter / 2);
+        margin-left: round($grip-gutter / 2) * -1;
 
         > .#{$grip-namespace}__cell {
-            padding-left: ($grip-gutter / 2);
+            padding-left: round($grip-gutter / 2);
         }
     }
 }
 
 @if ($grip-enable-grid-large) {
     .#{$grip-namespace}--large {
-        margin-left: -($grip-gutter * 2);
+        margin-left: ($grip-gutter * 2) * -1;
 
         > .#{$grip-namespace}__cell {
             padding-left: ($grip-gutter * 2);
@@ -263,7 +266,7 @@ $grip-enable-grid-cell-center:  false !default;
 
 @if ($grip-enable-grid-huge) {
     .#{$grip-namespace}--huge {
-        margin-left: -($grip-gutter * 4);
+        margin-left: ($grip-gutter * 4) * -1;
 
         > .#{$grip-namespace}__cell {
             padding-left: ($grip-gutter * 4);
@@ -279,8 +282,8 @@ $grip-enable-grid-cell-center:  false !default;
     }
 }
 
-@if ($grip-enable-grid-rev) {
-    .#{$grip-namespace}--rev {
+@if ($grip-enable-grid-reverse) {
+    .#{$grip-namespace}--reverse {
         direction: rtl;
 
         > .#{$grip-namespace}__cell {
@@ -301,23 +304,16 @@ $grip-enable-grid-cell-center:  false !default;
     }
 }
 
+@if ($grip-enable-grid-cell-content-center) {
+    .#{$grip-namespace}__cell--content-center > * {
+        display: inline-block;
+        text-align: center;
+    }
+}
 
-
-
-
-////////////////////////////////////////
-//  #GRID-WIDTHS
-////////////////////////////////////////
-//
-// 1. output default width modifiers
-// 2. if responsive flag is enabled, add responsive width modifiers
-//
-@include grip-create-widths($grip-widths); // [1]
-
-@if $grip-enable-responsive { // [2]
-    @each $alias, $query in $grip-breakpoints {
-        @media #{$query} {
-            @include grip-create-widths($grip-widths, -at-#{$alias});
-        }
+@if ($grip-enable-grid-cell-content-right) {
+    .#{$grip-namespace}__cell--content-right > * {
+        display: inline-block;
+        text-align: right;
     }
 }
