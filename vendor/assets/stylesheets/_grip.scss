@@ -130,29 +130,6 @@ $grip-enable-grid-cell-content-right:   false !default;
 }
 
 
-////////////////////////////////////////
-//  #RESPOND-TO-MIXIN
-////////////////////////////////////////
-//
-// Provides a way to hook into the breakpoints defined in `$grip-breakpoints`.
-//
-// 1. search breakpoint for alias
-// 2. if alias exists, print out media query
-//
-@mixin grip-respond-to($alias) {
-    $query: map-get($grip-breakpoints, $alias); // [1]
-
-    @if ($query) { // [2]
-        @media #{$query} {
-            @content;
-        }
-    }
-    @else{
-        @error "No breakpoint found for #{$alias}";
-    }
-}
-
-
 
 
 
@@ -315,5 +292,26 @@ $grip-enable-grid-cell-content-right:   false !default;
     .#{$grip-namespace}__cell--content-right > * {
         display: inline-block;
         text-align: right;
+    }
+}
+
+
+
+
+
+////////////////////////////////////////
+//  #GRID-WIDTHS
+////////////////////////////////////////
+//
+// 1. output default width modifiers
+// 2. if responsive flag is enabled, add responsive width modifiers
+//
+@include grip-create-widths($grip-widths); // [1]
+
+@if $grip-enable-responsive { // [2]
+    @each $alias, $query in $grip-breakpoints {
+        @media #{$query} {
+            @include grip-create-widths($grip-widths, -at-#{$alias});
+        }
     }
 }
